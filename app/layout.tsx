@@ -1,26 +1,23 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
+import "./globals.css";
+import { Inter } from "next/font/google";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: 'Flowmazon',
-  description: 'We make your wallet cry',
-}
+export const metadata = {
+  title: "Flowmazon",
+  description: "We make your wallet cry",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <main>
-          {children}
-        </main>
+        <main>{children}</main>
       </body>
     </html>
-  )
+  );
 }

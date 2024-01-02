@@ -1,77 +1,63 @@
-import prisma from '@/lib/db/prisma';
-import { Container, Typography, TextField, TextareaAutosize, Button } from '@mui/material';
-import { redirect } from 'next/navigation';
+import FormSubmitButton from "@/components/formSubmitButton";
+import { prisma } from "@/lib/db/prisma";
+import { redirect } from "next/navigation";
 
 export const metadata = {
-    title: "Add Product - Flowmazon"
-}
+  title: "Add Product - Flowmazon",
+};
 
 async function addProduct(formData: FormData) {
-    "use server"
+  "use server";
 
-    const name = formData.get('name')?.toString();
-    const description = formData.get('description')?.toString();
-    const imageUrl = formData.get('imageUrl')?.toString();
-    const price = Number(formData.get('price') || 0);
+  const name = formData.get("name")?.toString();
+  const description = formData.get("description")?.toString();
+  const imageUrl = formData.get("imageUrl")?.toString();
+  const price = Number(formData.get("price") || 0);
 
-    if(!name || !description || !imageUrl || !price){
-        throw Error('Missing required fields')
-    }
+  if (!name || !description || !imageUrl || !price) {
+    throw Error("Missing required fields");
+  }
 
-    await prisma.product.create({
-        data: {name, description, imageUrl, price},
-    })
+  await prisma.product.create({
+    data: { name, description, imageUrl, price },
+  });
 
-    redirect("/")
+  redirect("/");
 }
 
 export default function AddProductPage() {
   return (
-    <Container maxWidth="sm">
-      <Typography variant="h1" align="center" gutterBottom>
-        Add Product
-      </Typography>
+    <div>
+      <h1 className="mb-3 text-lg font-bold">Add Product</h1>
       <form action={addProduct}>
-        <TextField
-          fullWidth
+        <input
           required
           name="name"
-          label="Name"
-          variant="outlined"
-          margin="normal"
+          placeholder="Name"
+          className="input-bordered input mb-3 w-full"
         />
-        <TextareaAutosize
-          minRows={3}
-          style={{ width: '100%', resize: 'vertical'}}
+        <textarea
+          required
+          name="description"
           placeholder="Description"
+          className="textarea-bordered textarea mb-3 w-full"
         />
-        <TextField
-          fullWidth
+        <input
           required
           name="imageUrl"
-          label="Image URL"
-          variant="outlined"
-          margin="normal"
+          placeholder="Image URL"
           type="url"
+          className="input-bordered input mb-3 w-full"
         />
-        <TextField
-          fullWidth
+        <input
           required
           name="price"
-          label="Price"
-          variant="outlined"
-          margin="normal"
+          placeholder="Price"
           type="number"
+          className="input-bordered input mb-3 w-full"
         />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          style={{ marginTop: '16px' }}
-        >
-          Add Product
-        </Button>
+        <FormSubmitButton className="btn-block">Add Product</FormSubmitButton>
       </form>
-    </Container>
+    </div>
   );
 }
