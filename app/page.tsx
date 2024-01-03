@@ -1,95 +1,50 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+import { Button, Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
+import Link from 'next/link';
+import ProductCard from '@/components/ProductCard';
+import prisma from '@/lib/db/prisma';
 
-export default function Home() {
+export default async function Home() {
+  const products = await prisma.product.findMany({
+    orderBy: { id: 'desc' },
+  });
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
+    <div>
+      <Grid container spacing={4}>
+        <Grid item xs={12} lg={6}>
+          <Card>
+            <CardMedia
+              component="img"
+              alt={products[0].name}
+              height="400"
+              image={products[0].imageUrl}
             />
-          </a>
-        </div>
-      </div>
+            <CardContent>
+              <Typography variant="h5" component="div" gutterBottom>
+                {products[0].name}
+              </Typography>
+              <Typography variant="body1" paragraph>
+                {products[0].description}
+              </Typography>
+              <Link href={`/products/${products[0].id}`} passHref>
+                <Button variant="contained" color="primary">
+                  Check it out
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </Grid>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+        <Grid item xs={12} md={6} lg={6}>
+          <Grid container spacing={2}>
+            {products.slice(1).map((product) => (
+              <Grid item key={product.id} xs={12} md={6} lg={4}>
+                <ProductCard product={product} />
+              </Grid>
+            ))}
+          </Grid>
+        </Grid>
+      </Grid>
+    </div>
+  );
 }
