@@ -1,12 +1,13 @@
 "use client";
 
-import { ComponentProps } from "react";
+import { Button, CircularProgress } from "@mui/material";
+import { ButtonProps } from "@mui/material/Button";
 import { useFormStatus } from "react-dom";
 
 type FormSubmitButtonProps = {
   children: React.ReactNode;
   className?: string;
-} & ComponentProps<"button">;
+} & ButtonProps;
 
 export default function FormSubmitButton({
   children,
@@ -16,14 +17,14 @@ export default function FormSubmitButton({
   const { pending } = useFormStatus();
 
   return (
-    <button
+    <Button
       {...props}
       className={`btn-primary btn ${className}`}
       type="submit"
       disabled={pending}
+      startIcon={pending && <CircularProgress size={20} />}
     >
-      {pending && <span className="loading loading-spinner" />}
       {children}
-    </button>
+    </Button>
   );
 }

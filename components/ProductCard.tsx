@@ -1,7 +1,7 @@
-import { Product } from "@prisma/client";
-import Link from "next/link";
-import PriceTag from "./PriceTag";
-import Image from "next/image";
+import { Card, CardContent, CardMedia, Typography, Button, Grid } from '@mui/material';
+import Link from 'next/link';
+import PriceTag from './PriceTag';
+import { Product } from '@prisma/client';
 
 interface ProductCardProps {
   product: Product;
@@ -13,23 +13,40 @@ export default function ProductCard({ product }: ProductCardProps) {
     1000 * 60 * 60 * 24 * 7;
 
   return (
-    <Link
-      href={"/products/" + product.id}
-    >
-      <figure>
-        <Image
-          src={product.imageUrl}
+    <Card>
+      <Link href={`/products/${product.id}`} passHref>
+        <CardMedia
+          component="img"
           alt={product.name}
-          width={800}
-          height={400}
+          image={product.imageUrl}
+          style={{ width: 400, height: 400, objectFit: 'cover' }}
         />
-      </figure>
-      <div>
-        <h2>{product.name}</h2>
-        {isNew && <div>NEW</div>}
-        <p>{product.description}</p>
-        <PriceTag price={product.price} />
-      </div>
-    </Link>
+      </Link>
+      <CardContent>
+        <Typography variant="h6" component="div">
+          {product.name}
+        </Typography>
+        {isNew && (
+          <Typography variant="body2" color="secondary">
+            NEW
+          </Typography>
+        )}
+        <Typography variant="body1" paragraph>
+          {product.description}
+        </Typography>
+        <Grid container justifyContent="space-between" alignItems="center">
+          <Grid item>
+            <PriceTag price={product.price} />
+          </Grid>
+          <Grid item>
+            <Link href={`/products/${product.id}`} passHref>
+              <Button variant="contained" color="primary">
+                Check it out
+              </Button>
+            </Link>
+          </Grid>
+        </Grid>
+      </CardContent>
+    </Card>
   );
 }
