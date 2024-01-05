@@ -5,6 +5,8 @@ import { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { cache } from "react";
+import AddToCartButton from "./AddToCartButton";
+import { incrementProductQuantity } from "./actions";
 
 interface ProductPageProps {
     params: {
@@ -38,25 +40,26 @@ export default async function ProductPage({
     const product = await getProduct(id);
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', lg: 'row' }, gap: 4, alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column' }, padding: "10px", justifyContent: 'flex-start' }}>
             <Image
                 src={product.imageUrl}
                 alt={product.name}
                 width={500}
                 height={500}
-                className="rounded-lg"
+                style={{ borderRadius: '20px'}}
                 priority
             />
 
-            <Box>
-                <Typography variant="h3" component="h1" className="text-5xl font-bold">
+            <Box sx={{ padding: "10px"}}>
+                <Typography variant="h3" component="h1">
                     {product.name}
                 </Typography>
-                <PriceTag price={product.price} className="mt-4" />
-                <Typography variant="body1" className="py-6">
+                <PriceTag price={product.price} />
+                <Typography variant="body1">
                     {product.description}
                 </Typography>
             </Box>
+            <AddToCartButton productId={product.id} incrementProductQuantity={incrementProductQuantity} />
         </Box>
     );
 }

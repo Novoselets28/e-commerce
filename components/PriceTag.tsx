@@ -1,4 +1,5 @@
 import { formatPrice } from "@/lib/format";
+import Chip from "@mui/material/Chip";
 
 interface PriceTagProps {
   price: number;
@@ -6,6 +7,5 @@ interface PriceTagProps {
 }
 
 export default function PriceTag({ price, className }: PriceTagProps) {
-  return <span className={`badge ${className}`}>{formatPrice(price)}</span>;
+  return <Chip label={formatPrice(price)} color="primary" variant="outlined" />;
 }
-
