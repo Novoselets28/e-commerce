@@ -58,6 +58,5 @@ export default async function ProductPage({
                 </Typography>
             </Box>
         </Box>
-
     );
 }

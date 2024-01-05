@@ -1,49 +1,43 @@
-import { Button, Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
-import Link from 'next/link';
-import ProductCard from '@/components/ProductCard';
-import prisma from '@/lib/db/prisma';
+import ProductCard from "@/components/ProductCard";
+import prisma from "@/lib/db/prisma";
+import Image from "next/image";
+import Link from "next/link";
 
 export default async function Home() {
   const products = await prisma.product.findMany({
-    orderBy: { id: 'desc' },
+    orderBy: { id: "desc" },
   });
 
   return (
     <div>
-      <Grid container spacing={4}>
-        <Grid item xs={12} lg={6}>
-          <Card>
-            <CardMedia
-              component="img"
-              alt={products[0].name}
-              image={products[0].imageUrl}
-              style={{ height: 400, width: 400, objectFit: 'cover' }}
-            />
-            <CardContent>
-              <Typography variant="h5" component="div" gutterBottom>
-                {products[0].name}
-              </Typography>
-              <Typography variant="body1" paragraph>
-                {products[0].description}
-              </Typography>
-              <Link href={`/products/${products[0].id}`} passHref>
-                <Button variant="contained" color="primary">
-                  Check it out
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} lg={6}>
-          <Grid container spacing={4}>
-            {products.slice(1).map((product) => (
-              <Grid item key={product.id} xs={12} lg={4}>
-                <ProductCard product={product} />
-              </Grid>
-            ))}
-          </Grid>
-        </Grid>
-      </Grid>
+      <div className="hero rounded-xl bg-base-200">
+        <div className="hero-content flex-col lg:flex-row">
+          <Image
+            src={products[0].imageUrl}
+            alt={products[0].name}
+            width={400}
+            height={800}
+            className="w-full max-w-sm rounded-lg shadow-2xl"
+            priority
+          />
+          <div>
+            <h1 className="text-5xl font-bold">{products[0].name}</h1>
+            <p className="py-6">{products[0].description}</p>
+            <Link
+              href={"/products/" + products[0].id}
+              className="btn-primary btn"
+            >
+              Check it out
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      <div className="my-4 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {products.slice(1).map((product) => (
+          <ProductCard product={product} key={product.id} />
+        ))}
+      </div>
     </div>
   );
 }
